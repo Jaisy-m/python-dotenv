@@ -31,6 +31,10 @@ jobs:
     - name: Test with tox
       run: tox
 
+    - name: combine coverage reports
+      if: matrix.python-version == '3.12'
+      run: tox-e coverage-combine
+
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.0.1
       with:
@@ -38,4 +42,4 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: .coverage
           flags: unittests
-          name: python-dotenv
+          name: codecov-ubuntu-latest-py${{ matrix.python-version }}
