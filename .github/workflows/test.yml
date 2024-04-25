@@ -31,10 +31,6 @@ jobs:
     - name: Test with tox
       run: tox
 
-    - name: combine coverage reports
-      if: matrix.python-version == '3.12'
-      run: tox -e coverage-combine
-
   combine-and-upload-coverage:
     needs: test
     runs-on: ubuntu-latest
