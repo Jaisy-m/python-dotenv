@@ -35,11 +35,31 @@ jobs:
       if: matrix.python-version == '3.12'
       run: tox -e coverage-combine
 
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v4.0.1
-      with:
+  combine-and-upload-coverage:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install coverage
+        run: pip install coverage
+
+      - name: Combine coverage data
+        run: |
+          coverage combine
+          coverage report
+          coverage xml -o coverage.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
           slug: Jaisy-m/python-dotenv
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: .coverage
+          file: ./coverage.xml
           flags: unittests
-          name: codecov-ubuntu-latest-py${{ matrix.python-version }}
+          name: codecov-ubuntu-latest
