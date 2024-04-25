@@ -33,7 +33,7 @@ jobs:
 
     - name: combine coverage reports
       if: matrix.python-version == '3.12'
-      run: tox-e coverage-combine
+      run: tox -e coverage-combine
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.0.1
