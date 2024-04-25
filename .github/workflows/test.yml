@@ -31,6 +31,12 @@ jobs:
     - name: Test with tox
       run: tox
 
+    - name: Archive coverage artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-artifacts
+        path: .coverage*
+
   combine-and-upload-coverage:
     needs: test
     runs-on: ubuntu-latest
@@ -41,6 +47,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Download coverage artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-artifacts
 
       - name: Install coverage
         run: pip install coverage
