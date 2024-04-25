@@ -24,9 +24,49 @@ jobs:
 
     - name: Upgrade pip
       run: python -m pip install --upgrade pip
-    
+
     - name: Install dependencies
       run: pip install tox tox-gh-actions
 
     - name: Test with tox
       run: tox
+
+    - name: Archive coverage artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-artifacts
+        path: .coverage*
+
+  combine-and-upload-coverage:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Download coverage artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-artifacts
+
+      - name: Install coverage
+        run: pip install coverage
+
+      - name: Combine coverage data
+        run: |
+          coverage combine
+          coverage report
+          coverage xml -o coverage.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          slug: Jaisy-m/python-dotenv
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-ubuntu-latest
