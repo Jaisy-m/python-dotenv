@@ -31,12 +31,23 @@ jobs:
     - name: Test with tox
       run: tox
 
+    - name: Archive coverage
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-coverage
+        path: .coverage*
+
   opload-coverage:
     needs: test
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: get coverage artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-coverage
 
       - name: Set up Python
         uses: actions/setup-python@v5
