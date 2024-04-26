@@ -31,40 +31,11 @@ jobs:
     - name: Test with tox
       run: tox
 
-    - name: Archive coverage
-      uses: actions/upload-artifact@v2
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4.0.1
       with:
-        name: coverage-coverage
-        path: .coverage*
-
-  opload-coverage:
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: get coverage artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: coverage-coverage
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: pip install coverage
-
-      - name: Combine coverage data
-        run: coverage combine
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4.0.1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: .coverage
-          flags: unittests
-          name: python-dotenv
-          fail_ci_if_error: true
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: .coverage
+        flags: unittests
+        name: python-${{ matrix.python-version }}
+        fail_ci_if_error: true
