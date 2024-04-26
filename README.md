@@ -2,6 +2,7 @@
 
 [![Build Status][build_status_badge]][build_status_link]
 [![PyPI version][pypi_badge]][pypi_link]
+[![codecov](https://codecov.io/gh/Jaisy-m/python-dotenv/graph/badge.svg?token=EZHMRHJK63)](https://codecov.io/gh/Jaisy-m/python-dotenv)
 
 Python-dotenv reads key-value pairs from a `.env` file and can set them as environment
 variables. It helps in the development of applications following the
