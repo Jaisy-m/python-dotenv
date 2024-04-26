@@ -43,6 +43,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install dependencies
+        run: pip install coverage
+
       - name: Combine coverage data
         run: coverage combine
 
